@@ -9,7 +9,7 @@ manager.addDocument("en", "I want a triple espresso.", "Order");
 manager.addDocument("en", "One triple espresso please.", "Order");
 // etc
 
-exports.handler = function (event, context, callback) {
+exports.handler = async function (event, context, callback) {
     await manager.train();
     const minified = true
     const data = manager.export(!minified);
