@@ -1,0 +1,24 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "index",
+  "main": "",
+  "scripts": {
+
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RobinStut/be-course-19-20.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/RobinStut/be-course-19-20/issues"
+  },
+  "homepage": "https://github.com/RobinStut/be-course-19-20#readme",
+  "dependencies": {
+    "random-quotes": "^1.3.0"
+  },
+  "devDependencies": {
+  }
+}
