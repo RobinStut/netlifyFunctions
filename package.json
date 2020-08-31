@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "friendly-words": "^1.1.10"
+    "friendly-words": "^1.1.10",
+    "node-nlp": "^4.10.5"
   }
 }
