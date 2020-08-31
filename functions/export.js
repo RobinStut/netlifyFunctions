@@ -13,7 +13,9 @@ exports.handler = async function (event, context, callback) {
     // await manager.train();
     const minified = true
 
+    // 
     const manager = new NlpManager();
+    // manager.import(testData);
 
     manager.addDocument("en", "Can I get a triple espresso please?", "Order");
     manager.addDocument("en", "Can I order a triple espresso please?", "Order");
@@ -21,7 +23,7 @@ exports.handler = async function (event, context, callback) {
     manager.addDocument("en", "I want a triple espresso.", "Order");
     manager.addDocument("en", "One triple espresso please.", "Order");
 
-    // manager.train()
+    manager.train()
 
     const data = await manager.export(!minified);
 
