@@ -13,9 +13,90 @@ exports.handler = async function (event, context, callback) {
     // await manager.train();
     const minified = true
 
-    // 
-    const manager = new NlpManager();
-    // manager.import(testData);
+    const testData = {
+        "settings": {
+            "languages": [
+                "en"
+            ],
+            "threshold": 0.9,
+            "tag": "nlp",
+            "autoLoad": true,
+            "autoSave": true,
+            "modelFileName": "model.nlp",
+            "calculateSentiment": true
+        },
+        "nluManager": {
+            "settings": {
+                "tag": "nlu-manager"
+            },
+            "locales": [
+                "en"
+            ],
+            "languageNames": {},
+            "domainManagers": {
+                "en": {
+                    "settings": {
+                        "locale": "en",
+                        "tag": "domain-manager-en",
+                        "nluByDomain": {
+                            "default": {
+                                "className": "NeuralNlu",
+                                "settings": {}
+                            }
+                        },
+                        "trainByDomain": false,
+                        "useStemDict": true
+                    },
+                    "stemDict": {},
+                    "intentDict": {},
+                    "sentences": [],
+                    "domains": {
+                        "master_domain": {
+                            "settings": {
+                                "locale": "en",
+                                "tag": "nlu-en",
+                                "keepStopwords": true,
+                                "nonefeatureValue": 1,
+                                "nonedeltaMultiplier": 1.2,
+                                "spellCheck": false,
+                                "spellCheckDistance": 1,
+                                "filterZeros": true,
+                                "log": true
+                            }
+                        }
+                    }
+                }
+            },
+            "intentDomains": {},
+            "extraSentences": []
+        },
+        "ner": {
+            "settings": {
+                "tag": "ner",
+                "entityPreffix": "%",
+                "entitySuffix": "%"
+            },
+            "rules": {}
+        },
+        "nlgManager": {
+            "settings": {
+                "tag": "nlg-manager"
+            },
+            "responses": {}
+        },
+        "actionManager": {
+            "settings": {
+                "tag": "action-manager"
+            },
+            "actions": {}
+        },
+        "slotManager": {}
+    }
+
+    // const manager = new NlpManager();
+    const manager = new NlpManager({ modelFileName: '/tmp/model.nlp' });
+    manager.import(testData);
+
 
     manager.addDocument("en", "Can I get a triple espresso please?", "Order");
     manager.addDocument("en", "Can I order a triple espresso please?", "Order");
