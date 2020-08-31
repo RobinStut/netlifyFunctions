@@ -103,8 +103,9 @@ exports.handler = async function (event, context, callback) {
     manager.addDocument("en", "I want a triple espresso.", "Order");
     manager.addDocument("en", "One triple espresso please.", "Order");
 
+    manager.train()
 
-    const data = manager.export(!minified);
+    const data = await manager.export(!minified);
 
     callback(null, {
         statusCode: 200,
