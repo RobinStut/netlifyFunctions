@@ -10,7 +10,7 @@ const manager = new NlpManager({ languages: ["en"], threshold: 0.90 });
 // // etc
 
 exports.handler = async function (event, context, callback) {
-    await manager.train();
+    // await manager.train();
     const minified = true
     const data = manager.export(!minified);
 
