@@ -103,7 +103,7 @@ exports.handler = async function (event, context, callback) {
     manager.addDocument("en", "I want a triple espresso.", "Order");
     manager.addDocument("en", "One triple espresso please.", "Order");
 
-    manager.train()
+    // manager.train()
 
     const data = await manager.export(!minified);
 
