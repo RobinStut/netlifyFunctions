@@ -11,8 +11,9 @@ const { NlpManager } = require("node-nlp");
 
 exports.handler = async function (event, context, callback) {
 
-    console.log({event, context});
+    const subject = event.queryStringParameters.modal
 
+    console.log(subject);
     // await manager.train();
     const minified = true
 
@@ -99,8 +100,7 @@ exports.handler = async function (event, context, callback) {
     // const manager = new NlpManager();
     // const manager = new NlpManager({ modelFileName: '/tmp/model.nlp' });
     const manager = new NlpManager({ autoSave: false });
-    manager.import(testData);
-
+    // manager.import(testData);
 
     manager.addDocument("en", "Can I get a triple espresso please?", "Order");
     manager.addDocument("en", "Can I order a triple espresso please?", "Order");
