@@ -10,6 +10,9 @@ const { NlpManager } = require("node-nlp");
 // // etc
 
 exports.handler = async function (event, context, callback) {
+
+    console.log({event, context});
+
     // await manager.train();
     const minified = true
 
