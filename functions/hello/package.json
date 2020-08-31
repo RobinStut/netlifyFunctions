@@ -1,0 +1,16 @@
+{
+    "name": "get-gist",
+    "main": "get-gist.js",
+    "version": "1.0.0",
+    "description": "Gets gist data from GitHub",
+    "license": "MIT",
+    "repository": {
+      "type": "git",
+      "url": "https://github.com/voorhoede/code-class-netlify-functions-practical-guide.git",
+      "directory": "src/server/functions/get-gist"
+    },
+    "dependencies": {
+      "got": "^11.5.2",
+      "marked": "^1.1.1"
+    }
+  }
