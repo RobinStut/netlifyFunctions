@@ -94,7 +94,8 @@ exports.handler = async function (event, context, callback) {
     }
 
     // const manager = new NlpManager();
-    const manager = new NlpManager({ modelFileName: '/tmp/model.nlp' });
+    // const manager = new NlpManager({ modelFileName: '/tmp/model.nlp' });
+    const manager = new NlpManager({ autoSave: false });
     manager.import(testData);
 
 
@@ -107,6 +108,7 @@ exports.handler = async function (event, context, callback) {
     manager.train()
 
     const data = await manager.export(!minified);
+
 
     callback(null, {
         statusCode: 200,
