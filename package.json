@@ -10,10 +10,9 @@
   "license": "ISC",
   "devDependencies": {
     "node-nlp": "^4.10.5",
-    "firebase": "^7.19.1",
-    "dotenv": "^8.2.0"
+    "firebase": "^7.19.1"
   },
   "dependencies": {
-    
+    "dotenv": "^8.2.0"
   }
 }
