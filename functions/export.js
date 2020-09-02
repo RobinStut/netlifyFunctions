@@ -1,4 +1,4 @@
-// const { NlpManager } = require("node-nlp");
+const { NlpManager } = require("node-nlp");
 // const firebase = require("firebase/app");
 // require("firebase/database");
 
@@ -90,7 +90,45 @@ exports.handler = async function (event, context) {
 
         const {data} = await axios.get(apiUrl, { headers })
 
-        console.log(data);
+        // NLP manager
+        const manager = new NlpManager({ autoSave: false });
+
+    //     // get the current nlp model from the database
+    //     const model = await firebase.database().ref('model').once('value').then(snap => {
+    //         return snap.val()
+    //     });
+
+    //     // parse the data from the database
+    //     const parsedModel = JSON.parse(model)
+
+    //     // import the parsed model
+        manager.import(data);
+
+
+        // add sentences to the manager for training
+        manager.addDocument("en", "Can I get a triple espresso please?", "Order");
+        manager.addDocument("en", "Can I order a triple espresso please?", "Order");
+        manager.addDocument("en", "Give me a triple espresso.", "Order");
+        manager.addDocument("en", "I want a triple espresso.", "Order");
+        manager.addDocument("en", "One triple espresso please.", "Order");
+
+        // train the AI / manager
+        manager.train()
+
+        const minified = true
+
+        // export the minified manager to json (already stringified)
+        const output = await manager.export(minified);
+
+        console.log({output});
+
+        const stringified = JSON.stringify(output)
+
+        console.log({stringified});
+        // const {data} = await axios.get(apiUrl, { headers })
+        const sendToDb = await axios.put(apiUrl, stringified)
+
+
 
         // axios interceptors
         // axios .request . response

@@ -10,7 +10,8 @@
   "license": "ISC",
   "devDependencies": {
     "node-nlp": "^4.10.5",
-    "firebase": "^7.19.1"
+    "axios": "^0.20.0",
+    "googleapis": "^59.0.0"
   },
   "dependencies": {
     "dotenv": "^8.2.0"
