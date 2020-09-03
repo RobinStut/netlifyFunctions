@@ -47,12 +47,54 @@ exports.handler = async function (event, context) {
         const nlp = dock.get('nlp');
 
         // Import data
-        nlp.import(data);
+        // nlp.import(data);
+
+
+
+        nlp.addNamedEntityText("size", "grande", ["en"], ["Grande", "Large", "Triple"]);
+        nlp.addNamedEntityText("size", "short", ["en"], ["Short", "Small", "Single"]);
+        nlp.addNamedEntityText("size", "tall", ["en"], ["Tall", "Medium", "Double"]);
+
+        nlp.addNamedEntityText("drink", "americano", ["en"], ["Americano", "Americanos"]);
+        nlp.addNamedEntityText("drink", "latte", ["en"], ["Latte", "Lattes"]);
+        nlp.addNamedEntityText("drink", "cappuccino", ["en"], ["Cappuccino", "Cappuccinos"]);
+
+        nlp.addDocument("en", "Can I get a %size% %drink% please?", "Order");
+        nlp.addDocument("en", "Can I order a %size% %drink% please?", "Order");
+        nlp.addDocument("en", "Give me a %size% %drink%.", "Order");
+        nlp.addDocument("en", "I want a %size% %drink%.", "Order");
+        nlp.addDocument("en", "One %size% %drink% please.", "Order");
+
+
+        // nlp.addLanguage('en');
+        // // Adds the utterances and intents for the NLP
+        // nlp.addDocument('en', 'goodbye for now', 'greetings.bye');
+        // nlp.addDocument('en', 'bye bye take care', 'greetings.bye');
+        // nlp.addDocument('en', 'okay see you later', 'greetings.bye');
+        // nlp.addDocument('en', 'bye for now', 'greetings.bye');
+        // nlp.addDocument('en', 'i must go', 'greetings.bye');
+        // nlp.addDocument('en', 'hello', 'greetings.hello');
+        // nlp.addDocument('en', 'hi', 'greetings.hello');
+        // nlp.addDocument('en', 'howdy', 'greetings.hello');
+
+        // // Train also the NLG
+        // nlp.addAnswer('en', 'greetings.bye', 'Till next time');
+        // nlp.addAnswer('en', 'greetings.bye', 'see you soon!');
+        // nlp.addAnswer('en', 'greetings.hello', 'Hey there!');
+        // nlp.addAnswer('en', 'greetings.hello', 'Greetings!');
+
+        await nlp.train()
+
+        const result = nlp.process("Hi, I'd like one triple espresso, please.")
+
+        console.log({ result });
 
         const minified = true
 
         // export the minified manager to json
         const output = await nlp.export(minified);
+
+        // console.log(output);
 
         // stringify the output of the manager
         const stringified = JSON.stringify(output)
