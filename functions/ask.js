@@ -39,7 +39,7 @@ exports.handler = async function (event, context) {
 
         // Firebase GET call, destructured to data
         const { data } = await axios.get(apiUrl, { headers })
-        console.log(data);
+
         // NLP manager
         const dock = await dockStart({ use: ['Basic'], autoSave: false });
 
@@ -49,34 +49,11 @@ exports.handler = async function (event, context) {
         // // Import data
         nlp.import(data);
 
-        // await nlp.train()
-
-        console.log({ receivedMessage });
-
         const result = await nlp.process('nl', receivedMessage)
 
-        console.log(result);
-
-        console.log(JSON.stringify(result));
-
-        // console.log('here we go');
-        // console.log(JSON.stringify(result));
-
-        // export the minified manager to json
-        // const minified = true
-        // const output = await nlp.export(minified);
-
-        // // stringify the output of the manager
-
-        // const stringified = JSON.stringify(output)
-
-        // upload stringified items to firebase
-        // const sendToDb = await axios.put(apiUrl, stringified)
-
-        /* < pre > <code>${JSON.stringify(result.intent)}</code></pre> */
         return {
             statusCode: 200,
-            body: JSON.stringify(result, null, 2)
+            body: JSON.stringify(result)
         }
     }
     catch (e) {
