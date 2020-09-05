@@ -8,7 +8,7 @@ const {
 } = process.env
 
 const privateKey = GOOGLE_PRIVATE_KEY.replace(/\\n/gm, '\n')
-const apiUrl = 'https://graduate-16c74.firebaseio.com/model.json'
+const apiUrl = 'https://graduate-16c74.firebaseio.com/trainedModel.json'
 const scopes = [
     "https://www.googleapis.com/auth/userinfo.email",
     "https://www.googleapis.com/auth/firebase.database"
@@ -43,17 +43,32 @@ exports.handler = async function (event, context) {
         // NLP manager
         const dock = await dockStart({ use: ['Basic'], autoSave: false });
 
-        // Setup NLP
+        // // Setup NLP
         const nlp = dock.get('nlp');
 
-        // Import data
+        // // Import data
         nlp.import(data);
 
-        const result = await nlp.process(receivedMessage)
+        // nlp.addLanguage('nl');
 
-        console.log({ result });
+        // await nlp.train()
 
-        // return the data
+        const result = await nlp.process('nl', receivedMessage)
+
+        console.log(result);
+
+        // export the minified manager to json
+        const minified = true
+        const output = await nlp.export(minified);
+
+        // stringify the output of the manager
+
+        const stringified = JSON.stringify(output)
+
+        // upload stringified items to firebase
+        // const sendToDb = await axios.put(apiUrl, stringified)
+
+        /* < pre > <code>${JSON.stringify(result.intent)}</code></pre> */
         return {
             statusCode: 200,
             body: `${JSON.stringify(result)}`,
