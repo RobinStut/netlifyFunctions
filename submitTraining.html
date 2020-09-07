@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Training</title>
+		<style>
+			.form-row {
+				-webkit-box-align: start;
+				-ms-flex-align: start;
+				align-items: flex-start;
+				display: -webkit-box;
+				display: -ms-flexbox;
+				display: flex;
+				-ms-flex-wrap: wrap;
+				flex-wrap: wrap;
+				margin-left: -16px;
+			}
+			.form-row > * {
+				-webkit-box-flex: 1;
+				-ms-flex: 1;
+				/* flex: 1; */
+				margin-left: 16px;
+				margin-top: 16px;
+			}
+			.label {
+				transform: scale(0.75) translate3d(-16%, -120%, 0);
+			}
+			.form-row .label {
+				position: absolute;
+			}
+			.form-row .form-field {
+				margin-top: 1rem;
+				margin-left: 1rem;
+			}
+			.form-row + .form-row .label {
+				position: absolute;
+				visibility: hidden;
+			}
+			.form-textarea utterance {
+				resize: vertical;
+			}
+			.error {
+				border: 1px solid red;
+			}
+			.notification {
+				height: 18px;
+				width: 100%;
+				color: white;
+			}
+			.notification.success {
+				background-color: green;
+			}
+			.notification.error {
+				background-color: red;
+			}
+		</style>
+	</head>
+	<body>
+		<h1>training</h1>
+		<strong class="notification" data-notification-handle></strong>
+		<form id="userInputTrainingForm" action="">
+			<fieldset>
+				<legend>Gebruikers input</legend>
+				<div class="form-row" data-form-row>
+					<div class="form-field">
+						<label>
+							<div class="label">Taal</div>
+							<select name="Taal" class="language" required>
+								<option>NL</option>
+							</select>
+						</label>
+					</div>
+					<div class="form-field">
+						<label>
+							<div class="label">Opmerking</div>
+							<textarea
+								class="form-textarea utterance"
+								name="Text1"
+								cols="40"
+								rows="1"
+								placeholder="Waar blijft mijn bestelling?"
+								required
+							>
+Waar blijft mijn bestelling?</textarea
+							>
+						</label>
+					</div>
+					<div class="form-field">
+						<label>
+							<div class="label">Categorie</div>
+							<input
+								type="text"
+								class="intent"
+								placeholder="bestelling.status"
+								value="bestelling.status"
+								required
+							/>
+						</label>
+					</div>
+					<div class="form-field">
+						<button
+							type="button"
+							aria-label="Delete"
+							title="Delete"
+							data-delete-row
+						>
+							<svg
+								xmlns="http://www.w3.org/2000/svg"
+								width="16"
+								height="16"
+								viewBox="0 0 16 16"
+								aria-hidden="true"
+							>
+								<path
+									d="M8 15A7 7 0 118 1a7 7 0 010 14zm2.444-4.277l.009.01.28-.28a.765.765 0 000-1.081L9.366 8.003l1.371-1.37a.765.765 0 00.001-1.081l-.289-.289a.765.765 0 00-1.08 0L8.006 6.627 6.637 5.257a.765.765 0 00-1.08.001l-.29.29a.765.765 0 000 1.08l1.359 1.36-1.371 1.37a.765.765 0 00-.001 1.081l.288.289a.765.765 0 001.081-.001l1.371-1.371 1.369 1.368a.765.765 0 001.08 0z"
+								></path>
+							</svg>
+						</button>
+					</div>
+				</div>
+				<div class="form-row" data-form-row>
+					<div class="form-field">
+						<label>
+							<div class="label">Taal</div>
+							<select name="Taal" class="language" required>
+								<option>NL</option>
+							</select>
+						</label>
+					</div>
+					<div class="form-field">
+						<label>
+							<div class="label">Opmerking</div>
+							<textarea
+								class="form-textarea utterance"
+								name="Text1"
+								cols="40"
+								rows="1"
+								placeholder="Waar blijft mijn bestelling?"
+								required
+							>
+Waar blijft mijn bestelling?</textarea
+							>
+						</label>
+					</div>
+					<div class="form-field">
+						<label>
+							<div class="label">Categorie</div>
+							<input
+								type="text"
+								class="intent"
+								placeholder="bestelling.status"
+								value="bestelling.status"
+								required
+							/>
+						</label>
+					</div>
+					<div class="form-field">
+						<button
+							type="button"
+							aria-label="Delete"
+							title="Delete"
+							data-delete-row
+						>
+							<svg
+								xmlns="http://www.w3.org/2000/svg"
+								width="16"
+								height="16"
+								viewBox="0 0 16 16"
+								aria-hidden="true"
+							>
+								<path
+									d="M8 15A7 7 0 118 1a7 7 0 010 14zm2.444-4.277l.009.01.28-.28a.765.765 0 000-1.081L9.366 8.003l1.371-1.37a.765.765 0 00.001-1.081l-.289-.289a.765.765 0 00-1.08 0L8.006 6.627 6.637 5.257a.765.765 0 00-1.08.001l-.29.29a.765.765 0 000 1.08l1.359 1.36-1.371 1.37a.765.765 0 00-.001 1.081l.288.289a.765.765 0 001.081-.001l1.371-1.371 1.369 1.368a.765.765 0 001.08 0z"
+								></path>
+							</svg>
+						</button>
+					</div>
+				</div>
+				<div class="form-footer">
+					<button type="button" data-add-input-row>New variable</button>
+				</div>
+			</fieldset>
+		</form>
+		<form id="chatbotReactionTrainingForm" action="">
+			<fieldset>
+				<legend>Chatbot reactie</legend>
+				<div class="form-row" data-form-row>
+					<div class="form-field">
+						<label>
+							<div class="label">Taal</div>
+							<select name="Taal" class="language" required>
+								<option>NL</option>
+							</select>
+						</label>
+					</div>
+					<div class="form-field">
+						<label>
+							<div class="label">Opmerking</div>
+							<textarea
+								class="form-textarea utterance"
+								name="Text1"
+								cols="40"
+								rows="1"
+								placeholder="Waar blijft mijn bestelling?"
+								required
+							>
+Waar blijft mijn bestelling?</textarea
+							>
+						</label>
+					</div>
+					<div class="form-field">
+						<label>
+							<div class="label">Categorie</div>
+							<input
+								type="text"
+								class="intent"
+								placeholder="bestelling.status"
+								value="bestelling.status"
+								required
+							/>
+						</label>
+					</div>
+					<div class="form-field">
+						<button
+							type="button"
+							aria-label="Delete"
+							title="Delete"
+							data-delete-row
+						>
+							<svg
+								xmlns="http://www.w3.org/2000/svg"
+								width="16"
+								height="16"
+								viewBox="0 0 16 16"
+								aria-hidden="true"
+							>
+								<path
+									d="M8 15A7 7 0 118 1a7 7 0 010 14zm2.444-4.277l.009.01.28-.28a.765.765 0 000-1.081L9.366 8.003l1.371-1.37a.765.765 0 00.001-1.081l-.289-.289a.765.765 0 00-1.08 0L8.006 6.627 6.637 5.257a.765.765 0 00-1.08.001l-.29.29a.765.765 0 000 1.08l1.359 1.36-1.371 1.37a.765.765 0 00-.001 1.081l.288.289a.765.765 0 001.081-.001l1.371-1.371 1.369 1.368a.765.765 0 001.08 0z"
+								></path>
+							</svg>
+						</button>
+					</div>
+				</div>
+				<div class="form-row" data-form-row>
+					<div class="form-field">
+						<label>
+							<div class="label">Taal</div>
+							<select name="Taal" class="language" required>
+								<option>NL</option>
+							</select>
+						</label>
+					</div>
+					<div class="form-field">
+						<label>
+							<div class="label">Opmerking</div>
+							<textarea
+								class="form-textarea utterance"
+								name="Text1"
+								cols="40"
+								rows="1"
+								placeholder="Waar blijft mijn bestelling?"
+								required
+							>
+Waar blijft mijn bestelling?</textarea
+							>
+						</label>
+					</div>
+					<div class="form-field">
+						<label>
+							<div class="label">Categorie</div>
+							<input
+								type="text"
+								class="intent"
+								placeholder="bestelling.status"
+								value="bestelling.status"
+								required
+							/>
+						</label>
+					</div>
+					<div class="form-field">
+						<button
+							type="button"
+							aria-label="Delete"
+							title="Delete"
+							data-delete-row
+						>
+							<svg
+								xmlns="http://www.w3.org/2000/svg"
+								width="16"
+								height="16"
+								viewBox="0 0 16 16"
+								aria-hidden="true"
+							>
+								<path
+									d="M8 15A7 7 0 118 1a7 7 0 010 14zm2.444-4.277l.009.01.28-.28a.765.765 0 000-1.081L9.366 8.003l1.371-1.37a.765.765 0 00.001-1.081l-.289-.289a.765.765 0 00-1.08 0L8.006 6.627 6.637 5.257a.765.765 0 00-1.08.001l-.29.29a.765.765 0 000 1.08l1.359 1.36-1.371 1.37a.765.765 0 00-.001 1.081l.288.289a.765.765 0 001.081-.001l1.371-1.371 1.369 1.368a.765.765 0 001.08 0z"
+								></path>
+							</svg>
+						</button>
+					</div>
+				</div>
+				<div class="form-footer">
+					<button type="button" data-add-input-row>New variable</button>
+				</div>
+			</fieldset>
+		</form>
+
+		<button type="button" data-execute-training>Training uitvoeren</button>
+
+		<script
+			defer
+			src="https://www.gstatic.com/firebasejs/7.19.1/firebase-app.js"
+		></script>
+		<script
+			defer
+			src="https://www.gstatic.com/firebasejs/7.19.1/firebase-database.js"
+		></script>
+		<script
+			defer
+			src="https://www.gstatic.com/firebasejs/7.19.1/firebase-auth.js"
+		></script>
+		<script defer src="./init-firebase.js"></script>
+		<script src="./submitTraining.js"></script>
+	</body>
+</html>
