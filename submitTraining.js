@@ -3,6 +3,16 @@ const addInputRowTriggers = document.querySelectorAll('[data-add-input-row]')
 const executeTrainingTrigger = document.querySelector('[data-execute-training]')
 const notificationHandle = document.querySelector('[data-notification-handle]')
 const allStatusClassNames = ['success', 'error']
+const traininHistorygRef = defaultDatabase.ref("trainingHistory");
+
+const getDataFromDb = (ref) => {
+    return new Promise((resolve, reject) => {
+        const onError = error => reject(error);
+        const onData = snap => resolve(snap.val());
+
+        ref.on("value", onData, onError);
+    });
+};
 
 const notificationHandler = (message, status) => {
     message ? notificationHandle.innerHTML = message : notificationHandle.innerHTML = ""
@@ -10,7 +20,7 @@ const notificationHandler = (message, status) => {
         const classList = Array.from(notificationHandle.classList)
         classList.forEach(className => {
             if (allStatusClassNames.includes(className)) {
-                node.classList.remove(className)
+                notificationHandle.classList.remove(className)
             }
         })
 
@@ -76,7 +86,7 @@ const addRowHandler = (event) => {
     parentNode.insertBefore(clonedFormRow, formFooter)
 }
 
-const executeTraining = (e) => {
+const executeTraining = async (e) => {
     const userInputTrainingForm = document.getElementById('userInputTrainingForm')
     const chatbotReactionTrainingForm = document.getElementById('chatbotReactionTrainingForm')
 
@@ -96,19 +106,47 @@ const executeTraining = (e) => {
     resetStatusStyling()
 
 
-    const allInputsValues = () => {
+    const allInputsValues = async () => {
         const queu = [userInputTrainingForm, chatbotReactionTrainingForm]
         let missingValue = false
+        let duplicateValue = false
+        let alreadyExist = false
+        let formIsEmpty = false
+        const historyTrainingData = await getDataFromDb(traininHistorygRef)
+        const strippedHistoryTrainingData = historyTrainingData ? Object.values(historyTrainingData) : false
         const trainingData = {}
 
         queu.forEach(form => {
-            const row = Array.from(form.querySelectorAll('[data-form-row]'))
+            const id = form.id
+            const filteredHistoryTrainingData = {
+                language: [],
+                intent: [],
+                utterance: []
+            }
 
-            const rows = row.map(formRow => {
+            if (strippedHistoryTrainingData) {
+                strippedHistoryTrainingData.forEach(e => {
+                    e.trainingData[id].forEach(value => {
+                        const { language, intent, utterance } = value
+                        filteredHistoryTrainingData.language.push(language)
+                        filteredHistoryTrainingData.intent.push(intent)
+                        filteredHistoryTrainingData.utterance.push(utterance)
+                    })
+                })
+            }
+
+            const row = Array.from(form.querySelectorAll('[data-form-row]'))
+            const utteranceCollection = []
+
+            const rows = row.map((formRow, index) => {
                 const inputObj = {}
                 const inputTypes = Array.from(formRow.querySelectorAll('select, textarea, input'))
 
                 inputTypes.forEach(input => {
+                    // check if one of the forms is left empty
+                    if (!input.value && index === row.length - 1) {
+                        return
+                    }
                     // checks if all input fields are filled in
                     if (!input.checkValidity()) {
                         missingValue = true
@@ -116,21 +154,60 @@ const executeTraining = (e) => {
                         notificationHandler('Niet alle inputs zijn ingevuld!', 'error')
                         return
                     }
-                    if (input.classList.contains('utterance')) inputObj.utterance = input.value
+
                     if (input.classList.contains('language')) inputObj.language = input.value
                     if (input.classList.contains('intent')) inputObj.intent = input.value
+
+                    if (input.classList.contains('utterance')) {
+                        // check if input already exist
+                        if (utteranceCollection.includes(input.value)) {
+                            duplicateValue = true
+                            input.classList.add('error')
+                            notificationHandler('Er zijn opmerkingen met dezelfde waarde!', 'error')
+                            return
+                        }
+                        const inputExistsInDb = filteredHistoryTrainingData.utterance.includes(input.value)
+                        if (inputExistsInDb) {
+                            alreadyExist = true
+                            input.classList.add('error')
+                            notificationHandler('Deze waarde is al eerder toegevoegd!', 'error')
+                        }
+
+                        // push unique utterance to array
+                        utteranceCollection.push(input.value)
+                        inputObj.utterance = input.value
+                    }
                 })
 
+                const rowIsEmpty = () => {
+                    const keys = Object.keys(inputObj)
+                    if (keys.length === 1 && keys[0] === 'language') return true
+                    return false
+                }
+                if (rowIsEmpty()) {
+                    return false
+                }
                 return inputObj
             })
-            trainingData[form.id] = rows
+
+            if (rows[0]) trainingData[form.id] = rows
         })
-        return { missingValue, trainingData }
+        // if form is not empty
+        if (!Object.keys(trainingData).length) {
+            notificationHandler('Er is geen trainingsdata ingevuld!', 'error')
+
+        }
+
+        const valueIsIncorrect = missingValue || duplicateValue || alreadyExist || formIsEmpty
+
+        return { valueIsIncorrect, trainingData }
     }
 
+    const result = await allInputsValues()
+
     // if value is missing in form, this will be false
-    if (!allInputsValues().missingValue) {
-        const { trainingData } = allInputsValues()
+    if (!result.valueIsIncorrect) {
+        const { trainingData } = result
         const trainingId = Date.now()
         const date = new Date().toLocaleString()
         const historyObj = {
@@ -139,11 +216,11 @@ const executeTraining = (e) => {
             'trainingData': trainingData
         }
         const trainingRef = defaultDatabase.ref('training').child(`${trainingId}`);
-        const traininHistorygRef = defaultDatabase.ref('trainingHistory').child(`${trainingId}`);
+        const traininHistoryChildRef = traininHistorygRef.child(`${trainingId}`);
 
         // use to post data to firebase
         trainingRef.set(trainingData)
-        traininHistorygRef.update(historyObj)
+        traininHistoryChildRef.update(historyObj)
 
         fetch(`/.netlify/functions/train?trainingId=${encodeURI(trainingId)}`)
             .then(async response => response.json())
