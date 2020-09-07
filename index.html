@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Document</title>
+		<style>
+			.error {
+				background-color: red;
+			}
+		</style>
+	</head>
+	<body>
+		<nav>
+			<a href="/index.html">index</a>
+			<a href="/login.html">login</a>
+			<a href="/submitTraining.html">training</a>
+			<a href="/submitTraining.html">training history</a>
+		</nav>
+
+		<form action="" id="inputForm">
+			<label for="userInput">send your message:</label>
+			<input
+				type="text"
+				id="userInput"
+				value="Ik heb een product gekocht, en die is nu met korting"
+			/>
+		</form>
+		<span id="inputResponse"></span>
+
+		<script
+			defer
+			src="https://www.gstatic.com/firebasejs/7.19.1/firebase-app.js"
+		></script>
+		<script
+			defer
+			src="https://www.gstatic.com/firebasejs/7.19.1/firebase-database.js"
+		></script>
+		<script
+			defer
+			src="https://www.gstatic.com/firebasejs/7.19.1/firebase-auth.js"
+		></script>
+		<script defer src="./init-firebase.js"></script>
+		<script defer src="./db.js"></script>
+		<script src="./script.js"></script>
+	</body>
+</html>
