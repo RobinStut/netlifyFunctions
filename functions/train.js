@@ -69,10 +69,8 @@ exports.handler = async function (event, context) {
 
         // // Import data
         nlp.import(nlpModel);
-        // // nlp.load();
 
         nlp.addLanguage('nl');
-
 
         // 2.   ontvang nieuwe input voor het model. (vragen en antwoorden)
 
@@ -119,7 +117,7 @@ exports.handler = async function (event, context) {
 
         // 4.   sla model op in database
         // upload stringified items to firebase
-        // await axios.put(apiUrl, stringified)
+        await axios.put(modelUrl, stringified)
 
 
         return {
