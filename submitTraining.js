@@ -5,6 +5,17 @@ const notificationHandle = document.querySelector('[data-notification-handle]')
 const allStatusClassNames = ['success', 'error']
 const traininHistorygRef = defaultDatabase.ref("trainingHistory");
 
+const generateId = () => {
+    //https://tomspencer.dev/blog/2014/11/16/short-id-generation-in-javascript/
+    const ALPHABET = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    const ID_LENGTH = 12;
+    let rtn = '';
+    for (let i = 0; i < ID_LENGTH; i++) {
+        rtn += ALPHABET.charAt(Math.floor(Math.random() * ALPHABET.length));
+    }
+    return rtn;
+}
+
 const getDataFromDb = (ref) => {
     return new Promise((resolve, reject) => {
         const onError = error => reject(error);
@@ -28,13 +39,27 @@ const notificationHandler = (message, status) => {
     }
 }
 
+const resetStatusStyling = () => {
+    const inputsWithStatusClasses = Array.from(document.querySelectorAll('.success, .error'))
+
+    inputsWithStatusClasses.forEach(node => {
+        const classList = Array.from(node.classList)
+        classList.forEach(className => {
+            if (allStatusClassNames.includes(className)) {
+                node.classList.remove(className)
+            }
+        })
+    })
+    notificationHandler()
+}
+
 const deleteRowHandler = event => {
     let parentNode
 
     // get parent node
     event.path.forEach(node => {
-        if (node.nodeName === "FIELDSET") {
-            parentNode = node
+        if (node.className === "form-row") {
+            parentNode = node.parentNode
         }
     })
 
@@ -90,19 +115,6 @@ const executeTraining = async (e) => {
     const userInputTrainingForm = document.getElementById('userInputTrainingForm')
     const chatbotReactionTrainingForm = document.getElementById('chatbotReactionTrainingForm')
 
-    const resetStatusStyling = () => {
-        const inputsWithStatusClasses = Array.from(document.querySelectorAll('.success, .error'))
-
-        inputsWithStatusClasses.forEach(node => {
-            const classList = Array.from(node.classList)
-            classList.forEach(className => {
-                if (allStatusClassNames.includes(className)) {
-                    node.classList.remove(className)
-                }
-            })
-        })
-        notificationHandler()
-    }
     resetStatusStyling()
 
 
@@ -126,6 +138,7 @@ const executeTraining = async (e) => {
 
             if (strippedHistoryTrainingData) {
                 strippedHistoryTrainingData.forEach(e => {
+                    if (!e.trainingData[id]) return
                     e.trainingData[id].forEach(value => {
                         const { language, intent, utterance } = value
                         filteredHistoryTrainingData.language.push(language)
@@ -139,12 +152,19 @@ const executeTraining = async (e) => {
             const utteranceCollection = []
 
             const rows = row.map((formRow, index) => {
-                const inputObj = {}
+                const inputObj = {
+                    id: generateId(),
+                    language: '',
+                    intent: '',
+                    utterance: ''
+                }
                 const inputTypes = Array.from(formRow.querySelectorAll('select, textarea, input'))
+                let isOnlyOneInput = false
 
                 inputTypes.forEach(input => {
                     // check if one of the forms is left empty
                     if (!input.value && index === row.length - 1) {
+                        isOnlyOneInput = true
                         return
                     }
                     // checks if all input fields are filled in
@@ -186,6 +206,11 @@ const executeTraining = async (e) => {
                 }
                 if (rowIsEmpty()) {
                     return false
+                }
+
+                if (isOnlyOneInput) {
+                    const hasEmptyValue = Object.values(inputObj).includes('')
+                    if (hasEmptyValue) return
                 }
                 return inputObj
             })
