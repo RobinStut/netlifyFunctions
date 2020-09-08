@@ -38,69 +38,49 @@ exports.handler = async function (event, context) {
 
         // 1.   import het laatste nlp model.
         // Firebase GET call, destructured to data
-        const { data: nlpModel = data } = await axios.get(modelUrl, { headers })
-        const trainingHistory = await axios.get(trainingHistoryUrl, { headers })
-        console.log(trainingHistory);
+        const { data: trainingHistory = data } = await axios.get(trainingHistoryUrl, { headers })
+        const trainingData = Object.values(trainingHistory).map(data => data.trainingData)
 
         // NLP manager
         const dock = await dockStart({ use: ['Basic'], autoSave: false });
-
-        // // Setup NLP
         const nlp = dock.get('nlp');
 
-        // // Import data
-        // nlp.import(nlpModel);
-        // // // nlp.load();
+        // // Setup NLP
 
-        // nlp.addLanguage('nl');
+        nlp.addLanguage('nl');
 
         // 2.   ontvang nieuwe input voor het model. (vragen en antwoorden)
 
-        // const combinedTrainingUri = `${trainingUrl}${trainingId}.json`
-        // const { data: trainingData = data } = await axios.get(combinedTrainingUri, { headers })
+        trainingData.forEach(chatbotOrUser => {
+            for (const [key, value] of Object.entries(chatbotOrUser)) {
+                value.forEach(input => {
+                    const { language, intent, utterance } = input
+                    const chatbotOutput = key === 'chatbotReactionTrainingForm'
 
+                    // 3.2  Zo nee, train model
+                    if (chatbotOutput) {
+                        nlp.addAnswer(language, intent, utterance);
 
+                    }
+                    else {
+                        nlp.addDocument(language, utterance, intent);
+                    }
+                });
+            }
+        })
 
-        // for (const [key, value] of Object.entries(trainingData)) {
-        //     value.forEach(input => {
-        //         const { language, intent, utterance } = input
-        //         const valueIsAlreadyInModel = JSON.stringify(nlpModel).includes(utterance)
-        //         const chatbotOutput = key === 'chatbotReactionTrainingForm'
-        //         const userOrChatbot = chatbotOutput ? 'Chatbot reactie' : 'Gebruikers input'
+        await nlp.train()
 
-        //         // 3.1  Zo ja, return error melding, value already exist
-        //         if (valueIsAlreadyInModel) {
-        //             console.log('already added');
-        //             const message = `Deze trainingdata is al toegevoegd: ${userOrChatbot} ${input}`
-        //             return {
-        //                 statusCode: 500,
-        //                 body: message
-        //             }
-        //         }
-
-        //         // 3.2  Zo nee, train model
-        //         if (chatbotOutput) {
-        //             nlp.addAnswer(language, intent, utterance);
-
-        //         }
-        //         else {
-        //             nlp.addDocument(language, utterance, intent);
-        //         }
-        //     });
-        // }
-
-        // await nlp.train()
-
-        // // export the minified manager to json
-        // const minified = true
-        // const output = await nlp.export(minified);
+        // export the minified manager to json
+        const minified = true
+        const output = await nlp.export(minified);
 
         // // stringify the output of the manager
-        // const stringified = JSON.stringify(output)
+        const stringified = JSON.stringify(output)
 
         // // 4.   sla model op in database
         // // upload stringified items to firebase
-        // await axios.put(modelUrl, stringified)
+        await axios.put(modelUrl, stringified)
 
         return {
             statusCode: 200,
