@@ -43,11 +43,11 @@ exports.handler = async function (event, context) {
         const trainingData = Object.values(trainingHistory).map(data => data.trainingData)
 
         // NLP manager
-        const dock = await dockStart({ use: ['Basic'], autoSave: false });
+        const dock = await dockStart({ use: ['Basic'], autoSave: false, modelFileName: '/tmp/model.nlp' });
         const nlp = dock.get('nlp');
 
         // nlp.import();
-        nlp.load('./model.nlp')
+        nlp.load('./tmp/model.nlp')
 
         // // Setup NLP
 
