@@ -235,46 +235,32 @@ const executeTraining = async (e) => {
         const { trainingData } = result
         const trainingId = Date.now()
         const date = new Date().toLocaleString()
+
         const historyObj = {
             'trainedBy': '',
             'date': date,
             'trainingData': trainingData
         }
-        const trainingRef = defaultDatabase.ref('training').child(`${trainingId}`);
         const traininHistoryChildRef = traininHistorygRef.child(`${trainingId}`);
 
         // use to post data to firebase
-        trainingRef.set(trainingData)
         traininHistoryChildRef.update(historyObj)
+        deleteInputRowTriggers.forEach((deleteButton, index) => {
+            // https://stackoverflow.com/a/49117631
+            try {
+                // For modern browsers except IE:
+                const event = new CustomEvent('click');
+            } catch (err) {
+                // If IE 11 (or 10 or 9...?) do it this way:
 
-        fetch(`/.netlify/functions/train?trainingId=${encodeURI(trainingId)}`)
-            .then(async response => response.json())
-            .then(json => {
-                if (json.statusCode !== 200) return
-                trainingRef.remove()
-
-                // reset form
-                deleteInputRowTriggers.forEach((deleteButton, index) => {
-                    // https://stackoverflow.com/a/49117631
-                    try {
-                        // For modern browsers except IE:
-                        const event = new CustomEvent('click');
-                    } catch (err) {
-                        // If IE 11 (or 10 or 9...?) do it this way:
-
-                        // Create the event.
-                        const event = deleteButton.createEvent('Event');
-                        // Define that the event name is 'build'.
-                        event.initEvent('click', true, true);
-                    }
-                    deleteButton.dispatchEvent(new Event("click"))
-                })
-
-                notificationHandler('Training voltooid!', 'success')
-            })
-            .catch(e => {
-                console.log(e);
-            })
+                // Create the event.
+                const event = deleteButton.createEvent('Event');
+                // Define that the event name is 'build'.
+                event.initEvent('click', true, true);
+            }
+            deleteButton.dispatchEvent(new Event("click"))
+        })
+        notificationHandler('Training voltooid!', 'success')
     }
 }
 
