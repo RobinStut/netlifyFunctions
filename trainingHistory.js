@@ -21,7 +21,7 @@ const getPathById = (ref, id) => {
                 const trainingData = differentTraining.child("trainingData");
                 trainingData.forEach(chatbotOrUser => {
                     const findId = (training) => {
-                        return training.id === id;
+                        if (training) return training.id === id;
                     }
 
                     const hasId = chatbotOrUser.val().find(findId);
@@ -255,7 +255,6 @@ const updateHistoryChanges = (e) => {
             const pathArray = await getPathById(trainingHistoryDbRef, id)
             const formRow = document.getElementById(id)
             const formRowElements = formRow.querySelectorAll('select, input, textarea')
-            const utteranceCollection = []
             let missingValue = false
             let duplicateValue = false
 
@@ -308,18 +307,9 @@ const updateHistoryChanges = (e) => {
             // update
             trainingHistoryDbRef.child(childPath).set(updatedFormRowValues)
         })
+
     }
-    fetch(`/.netlify/functions/update`)
-        .then(async response => response.json())
-        .then(json => {
-            if (json.statusCode !== 200) return
-            notificationHandler('De wijzigingen zijn doorgevoerd!', 'success')
-        })
-        .catch(e => {
-            notificationHandler(`error: ${e.message}`, 'error')
-        })
-
-
+    notificationHandler('De wijzigingen zijn doorgevoerd!', 'success')
 }
 
 updateChangesTrigger.addEventListener('click', updateHistoryChanges)
