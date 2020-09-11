@@ -47,7 +47,7 @@ exports.handler = async function (event, context) {
         const nlp = dock.get('nlp');
 
         // nlp.import();
-        nlp.load('./tmp/model.nlp')
+        nlp.load('/tmp/model.nlp')
 
         // // Setup NLP
 
