@@ -3,31 +3,97 @@
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Document</title>
+		<title>Dashboard</title>
 		<style>
-			.error {
-				background-color: red;
+			body {
+				margin: 0;
+			}
+			a {
+				text-align: center;
+			}
+			svg {
+				width: 2em;
+			}
+			nav {
+				width: 5rem;
+				height: 100vh;
+				display: flex;
+				flex-direction: column;
+			}
+			nav > * {
+				margin: auto 0;
+			}
+			aside {
+				border-right: 1px solid black;
+				width: 5rem;
+				height: 100vh;
+				padding: 1rem;
 			}
 		</style>
 	</head>
 	<body>
-		<nav>
-			<a href="/index.html">index</a>
-			<a href="/login.html">login</a>
-			<a href="/submitTraining.html">training</a>
-			<a href="/submitTraining.html">training history</a>
-		</nav>
+		<aside>
+			<nav>
+				<button class="hide" logout-button>Logout</button>
 
-		<form action="" id="inputForm">
-			<label for="userInput">send your message:</label>
-			<input
-				type="text"
-				id="userInput"
-				value="Ik heb een product gekocht, en die is nu met korting"
-			/>
-		</form>
-		<span id="inputResponse"></span>
-
+				<a href="./submitTraining.html"
+					>Train AI
+					<svg
+						enable-background="new 0 0 512 512"
+						version="1.1"
+						viewBox="0 0 512 512"
+						xml:space="preserve"
+						xmlns="http://www.w3.org/2000/svg"
+					>
+						<path
+							d="m512 349.98c0-19.53-12.578-36.024-30-42.237v-155.39l30-12.369-256-102.71-256 102.71 256 102.72 196-78.3v143.35c-17.422 6.213-30 22.707-30 42.237 0 17.88 10.56 33.228 25.701 40.481l-24.924 74.773 28.447 9.492 15.776-47.329 15.776 47.329 28.447-9.492-24.924-74.773c15.141-7.252 25.701-22.6 25.701-40.481z"
+						/>
+						<path
+							d="m256 275.03-135-54.208v39.164c0 42.759 58.037 75 135 75s135-32.241 135-75v-39.164l-135 54.208z"
+						/>
+					</svg>
+				</a>
+				<a href="./trainingHistory.html"
+					>Eerdere resultaten
+					<svg
+						enable-background="new 0 0 448 448"
+						version="1.1"
+						viewBox="0 0 448 448"
+						xml:space="preserve"
+						xmlns="http://www.w3.org/2000/svg"
+					>
+						<polygon
+							points="234.67 138.67 234.67 245.33 325.97 299.52 341.33 273.6 266.67 229.33 266.67 138.67"
+						/>
+						<path
+							d="m255.89 32c-106.13 0-191.89 85.973-191.89 192h-64l83.093 83.093 1.493 3.093 86.081-86.186h-64c0-82.453 66.88-149.33 149.33-149.33s149.33 66.88 149.33 149.33-66.88 149.33-149.33 149.33c-41.28 0-78.507-16.853-105.49-43.84l-30.187 30.187c34.667 34.773 82.56 56.32 135.57 56.32 106.13 0 192.11-85.973 192.11-192s-85.973-192-192.11-192z"
+						/>
+					</svg>
+				</a>
+				<a href="./chatbot.html"
+					>Test chatbot<svg
+						viewBox="0 -64 428 428"
+						xmlns="http://www.w3.org/2000/svg"
+					>
+						<path
+							d="m317.92 187.93h-207.84c-11.871 0-21.5 9.625-21.5 21.5s9.6289 21.5 21.5 21.5h207.84c11.871 0 21.5-9.625 21.5-21.5s-9.6289-21.5-21.5-21.5zm-169.92 27c0 3.3125-2.6875 6-6 6h-11c-3.3125 0-6-2.6875-6-6v-11c0-3.3125 2.6875-6 6-6h11c3.3125 0 6 2.6875 6 6zm155 0c0 3.3125-2.6875 6-6 6h-11c-3.3125 0-6-2.6875-6-6v-11c0-3.3125 2.6875-6 6-6h11c3.3125 0 6 2.6875 6 6z"
+						/>
+						<path
+							d="m53.758 234.93c-3.0547-10.16-4.6562-20.699-4.7578-31.309v-21.574c0.11719-6.7539 0.82031-13.484 2.0938-20.117h-14.98c-19.914 0-36.113 16.586-36.113 36.5 0 19.914 16.199 36.5 36.113 36.5z"
+						/>
+						<path
+							d="m391.89 161.93h-14.98c1.2734 6.6328 1.9766 13.363 2.0938 20.117v21.574c-0.10156 10.609-1.7031 21.148-4.7578 31.309h17.645c19.914 0 36.113-16.586 36.113-36.5 0-19.914-16.199-36.5-36.113-36.5z"
+						/>
+						<path
+							d="m366 182.16c0-53.148-43.086-96.234-96.234-96.234h-112.53c-53.148 0-96.234 43.086-96.234 96.234v21.527c0 53.152 43.086 96.238 96.234 96.238h112.53c53.148 0 96.234-43.086 96.234-96.238zm-48.078 60.766h-207.84c-18.5 0-33.5-15-33.5-33.5 0-18.504 15-33.5 33.5-33.5h207.84c18.5 0 33.5 14.996 33.5 33.5 0 18.5-15 33.5-33.5 33.5z"
+						/>
+						<path
+							d="m353.91 28.109c-0.13672 13.254 9.1172 24.754 22.09 27.461v100.36h12v-100.36c12.98-2.7031 22.246-14.199 22.129-27.461 0-15.523-12.586-28.109-28.109-28.109-15.523 0-28.109 12.586-28.109 28.109z"
+						/>
+					</svg>
+				</a>
+			</nav>
+		</aside>
 		<script
 			defer
 			src="https://www.gstatic.com/firebasejs/7.19.1/firebase-app.js"
@@ -41,7 +107,6 @@
 			src="https://www.gstatic.com/firebasejs/7.19.1/firebase-auth.js"
 		></script>
 		<script defer src="./init-firebase.js"></script>
-		<script defer src="./db.js"></script>
-		<script src="./script.js"></script>
+		<script defer src="./logout.js"></script>
 	</body>
 </html>
