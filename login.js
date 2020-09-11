@@ -95,6 +95,6 @@ registerTrigger.addEventListener('click', submitForm)
 form.addEventListener('submit', submitForm)
 
 auth.onAuthStateChanged(firebaseUser => {
-    if (firebaseUser) window.location.replace("/dashboard.html")
+    if (firebaseUser) window.location.replace("/index.html")
     else console.log('not logged in');
 })
