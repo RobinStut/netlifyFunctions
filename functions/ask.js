@@ -78,7 +78,7 @@ exports.handler = async function (event, context) {
         })
 
         await nlp.train()
-        nlp.export('./model.nlp')
+        // nlp.export('./model.nlp')
         const result = await nlp.process('nl', receivedMessage)
         const { intent, answers } = result
 
