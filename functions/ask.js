@@ -46,6 +46,9 @@ exports.handler = async function (event, context) {
         const dock = await dockStart({ use: ['Basic'], autoSave: false });
         const nlp = dock.get('nlp');
 
+        // nlp.import();
+        nlp.load('./model.nlp')
+
         // // Setup NLP
 
         nlp.addLanguage('nl');
@@ -75,7 +78,7 @@ exports.handler = async function (event, context) {
         })
 
         await nlp.train()
-
+        nlp.export('./model.nlp')
         const result = await nlp.process('nl', receivedMessage)
         const { intent, answers } = result
 
