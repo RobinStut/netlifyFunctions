@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Document</title>
+		<style>
+			.hide {
+				display: none;
+			}
+			.notification {
+				color: white;
+			}
+			.notification.error {
+				background-color: red;
+			}
+			.notification.green {
+				background-color: green;
+			}
+			input.error {
+				border: 1px solid red;
+			}
+		</style>
+	</head>
+	<body>
+		<strong class="notification" data-notification-handle></strong>
+		<form action="" login-form>
+			<span class="error"></span>
+			<label>
+				Email
+				<input type="email" email-input />
+			</label>
+
+			<label>
+				Wachtwoord
+				<input type="password" password-input />
+			</label>
+			<button login-button>Login</button>
+			<button class="hide" register-button>Registreer account</button>
+		</form>
+		<button type="submit" signUp-button>Maak account</button>
+
+		<script
+			defer
+			src="https://www.gstatic.com/firebasejs/7.19.1/firebase-app.js"
+		></script>
+		<script
+			defer
+			src="https://www.gstatic.com/firebasejs/7.19.1/firebase-database.js"
+		></script>
+		<script
+			defer
+			src="https://www.gstatic.com/firebasejs/7.19.1/firebase-auth.js"
+		></script>
+		<script defer src="./init-firebase.js"></script>
+		<script defer src="./login.js"></script>
+	</body>
+</html>
