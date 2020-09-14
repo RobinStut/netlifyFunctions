@@ -44,55 +44,63 @@ exports.handler = async function (event, context) {
 
         // NLP manager
         const dock = await dockStart({ use: ['Basic'], autoSave: false, modelFileName: '/tmp/model.nlp' });
-        const nlp = dock.get('nlp');
-
-        // nlp.import();
-        nlp.load('/tmp/model.nlp')
-
-        // // Setup NLP
-
-        nlp.addLanguage('nl');
-
-        // 2.   ontvang nieuwe input voor het model. (vragen en antwoorden)
-
-        const chatbotAnswerFallBack = []
-
-        trainingData.forEach(chatbotOrUser => {
-            for (const [key, value] of Object.entries(chatbotOrUser)) {
-                value.forEach(input => {
-                    if (!input) return
-                    const { language, intent, utterance } = input
-                    const chatbotOutput = key === 'chatbotReactionTrainingForm'
-
-                    // 3.2  Zo nee, train model
-                    if (chatbotOutput) {
-                        chatbotAnswerFallBack.push({ language, intent, utterance })
-                        nlp.addAnswer(language, intent, utterance);
-
-                    }
-                    else {
-                        nlp.addDocument(language, utterance, intent);
-                    }
-                });
-            }
-        })
-
-        await nlp.train()
-        // nlp.export('./model.nlp')
-        const result = await nlp.process('nl', receivedMessage)
-        const { intent, answers } = result
-
-        if (!answers.length && intent !== 'None') {
-            const fallbackAnswer = chatbotAnswerFallBack.find(({ intent }) => intent === intent)
-            if (fallbackAnswer) answers.push(fallbackAnswer.utterance)
-        }
-
-        if (intent === 'None') answers.push('Ik ben niet goed genoeg getrained om deze vraag te beantwoorden...')
+        // const nlp = dock.get('nlp');
 
         return {
             statusCode: 200,
-            body: JSON.stringify({ 'result': { intent, answers }, 'statusCode': 200 })
+            body: JSON.stringify({
+                'result': { intent: 'intentTest', answers: 'answer' }
+            })
         }
+
+        // // nlp.import();
+        // nlp.load('/tmp/model.nlp')
+
+        // // // Setup NLP
+
+        // nlp.addLanguage('nl');
+
+        // // 2.   ontvang nieuwe input voor het model. (vragen en antwoorden)
+
+        // const chatbotAnswerFallBack = []
+
+        // trainingData.forEach(chatbotOrUser => {
+        //     for (const [key, value] of Object.entries(chatbotOrUser)) {
+        //         value.forEach(input => {
+        //             if (!input) return
+        //             const { language, intent, utterance } = input
+        //             const chatbotOutput = key === 'chatbotReactionTrainingForm'
+
+        //             // 3.2  Zo nee, train model
+        //             if (chatbotOutput) {
+        //                 chatbotAnswerFallBack.push({ language, intent, utterance })
+        //                 nlp.addAnswer(language, intent, utterance);
+
+        //             }
+        //             else {
+        //                 nlp.addDocument(language, utterance, intent);
+        //             }
+        //         });
+        //     }
+        // })
+
+        // await nlp.train()
+        // // nlp.export('./model.nlp')
+        // const result = await nlp.process('nl', receivedMessage)
+        // const { intent, answers } = result
+
+        // if (!answers.length && intent !== 'None') {
+        //     const fallbackAnswer = chatbotAnswerFallBack.find(({ intent }) => intent === intent)
+        //     if (fallbackAnswer) answers.push(fallbackAnswer.utterance)
+        // }
+
+        // if (intent === 'None') answers.push('Ik ben niet goed genoeg getrained om deze vraag te beantwoorden...')
+
+        // return {
+        //     statusCode: 200,
+        //     body: JSON.stringify({ 'result': { intent, answers }, 'statusCode': 200 })
+        // }
+
     }
     catch (e) {
         // throw new Error('Error fetching Google Analytics data')
