@@ -53,7 +53,7 @@ exports.handler = async function (event, context) {
 
         // // // Setup NLP
 
-        // nlp.addLanguage('nl');
+        nlp.addLanguage('nl');
 
         // // 2.   ontvang nieuwe input voor het model. (vragen en antwoorden)
 
