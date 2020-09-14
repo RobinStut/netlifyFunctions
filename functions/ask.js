@@ -46,15 +46,10 @@ exports.handler = async function (event, context) {
         const dock = await dockStart({ use: ['Basic'], autoSave: false, modelFileName: '/tmp/model.nlp' });
         const nlp = dock.get('nlp');
 
-        // return {
-        //     statusCode: 200,
-        //     body: JSON.stringify({
-        //         'result': { intent: 'intentTest', answers: 'answer' }
-        //     })
-        // }
 
         // // nlp.import();
         nlp.load('/tmp/model.nlp')
+
 
         // // // Setup NLP
 
@@ -100,6 +95,14 @@ exports.handler = async function (event, context) {
         //     statusCode: 200,
         //     body: JSON.stringify({ 'result': { intent, answers }, 'statusCode': 200 })
         // }
+
+
+        return {
+            statusCode: 200,
+            body: JSON.stringify({
+                'result': { intent: 'intentTest', answers: 'answer' }
+            })
+        }
 
     }
     catch (e) {
