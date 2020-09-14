@@ -88,7 +88,11 @@ exports.handler = async function (event, context) {
         const { intent, answers } = result
 
         if (!answers.length && intent !== 'None') {
-            const fallbackAnswer = chatbotAnswerFallBack.find(({ intent }) => intent === intent)
+            const fallbackAnswer = chatbotAnswerFallBack.find(value => {
+                if (value.intent === intent) return value
+            })
+
+            // const fallbackAnswer = chatbotAnswerFallBack.find(({ intent }) => intent === intent)
             if (fallbackAnswer) answers.push(fallbackAnswer.utterance)
         }
 
@@ -98,10 +102,6 @@ exports.handler = async function (event, context) {
             statusCode: 200,
             body: JSON.stringify({ 'result': { intent, answers }, 'statusCode': 200 })
         }
-
-
-
-
     }
     catch (e) {
         // throw new Error('Error fetching Google Analytics data')
