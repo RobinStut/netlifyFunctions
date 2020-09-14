@@ -78,30 +78,29 @@ exports.handler = async function (event, context) {
             }
         })
 
-        await nlp.train()
-        // // nlp.export('./model.nlp')
-        // const result = await nlp.process('nl', receivedMessage)
-        // const { intent, answers } = result
+        try {
+            await nlp.train()
+        } catch (error) {
+            console.log(error);
+        }
+        // nlp.export('./model.nlp')
+        const result = await nlp.process('nl', receivedMessage)
+        const { intent, answers } = result
 
-        // if (!answers.length && intent !== 'None') {
-        //     const fallbackAnswer = chatbotAnswerFallBack.find(({ intent }) => intent === intent)
-        //     if (fallbackAnswer) answers.push(fallbackAnswer.utterance)
-        // }
+        if (!answers.length && intent !== 'None') {
+            const fallbackAnswer = chatbotAnswerFallBack.find(({ intent }) => intent === intent)
+            if (fallbackAnswer) answers.push(fallbackAnswer.utterance)
+        }
 
-        // if (intent === 'None') answers.push('Ik ben niet goed genoeg getrained om deze vraag te beantwoorden...')
-
-        // return {
-        //     statusCode: 200,
-        //     body: JSON.stringify({ 'result': { intent, answers }, 'statusCode': 200 })
-        // }
-
+        if (intent === 'None') answers.push('Ik ben niet goed genoeg getrained om deze vraag te beantwoorden...')
 
         return {
             statusCode: 200,
-            body: JSON.stringify({
-                'result': { intent: 'intentTest', answers: 'answer' }
-            })
+            body: JSON.stringify({ 'result': { intent, answers }, 'statusCode': 200 })
         }
+
+
+
 
     }
     catch (e) {
