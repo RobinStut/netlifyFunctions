@@ -50,34 +50,33 @@ exports.handler = async function (event, context) {
         // // nlp.import();
         nlp.load('/tmp/model.nlp')
 
-
         // // // Setup NLP
 
         nlp.addLanguage('nl');
 
         // // 2.   ontvang nieuwe input voor het model. (vragen en antwoorden)
 
-        // const chatbotAnswerFallBack = []
+        const chatbotAnswerFallBack = []
 
-        // trainingData.forEach(chatbotOrUser => {
-        //     for (const [key, value] of Object.entries(chatbotOrUser)) {
-        //         value.forEach(input => {
-        //             if (!input) return
-        //             const { language, intent, utterance } = input
-        //             const chatbotOutput = key === 'chatbotReactionTrainingForm'
+        trainingData.forEach(chatbotOrUser => {
+            for (const [key, value] of Object.entries(chatbotOrUser)) {
+                value.forEach(input => {
+                    if (!input) return
+                    const { language, intent, utterance } = input
+                    const chatbotOutput = key === 'chatbotReactionTrainingForm'
 
-        //             // 3.2  Zo nee, train model
-        //             if (chatbotOutput) {
-        //                 chatbotAnswerFallBack.push({ language, intent, utterance })
-        //                 nlp.addAnswer(language, intent, utterance);
+                    // 3.2  Zo nee, train model
+                    if (chatbotOutput) {
+                        chatbotAnswerFallBack.push({ language, intent, utterance })
+                        nlp.addAnswer(language, intent, utterance);
 
-        //             }
-        //             else {
-        //                 nlp.addDocument(language, utterance, intent);
-        //             }
-        //         });
-        //     }
-        // })
+                    }
+                    else {
+                        nlp.addDocument(language, utterance, intent);
+                    }
+                });
+            }
+        })
 
         // await nlp.train()
         // // nlp.export('./model.nlp')
